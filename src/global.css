@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --primary-color: #94fa01;
+  --secondary-color: #94fa01;
+  --dark-color: #0b0b0b;
+  --gray-color: #828282;
+}
+
+body {
+  font-family: 'Work Sans', Arial, Helvetica, sans-serif;
+}
+
+@media (max-width: 768px) {
+  .container, .main, .content, .page {
+    padding: 10px !important;
+    margin: 10px auto !important;
+    max-width: 100% !important;
+  }
+  
+  button, .btn, .button {
+    width: 100% !important;
+    margin: 5px 0 !important;
+    padding: 12px !important;
+  }
+  
+  input, textarea, select {
+    width: 100% !important;
+    margin: 5px 0 !important;
+    padding: 12px !important;
+  }
+}
