@@ -544,6 +544,7 @@ function AppContent() {
                 userEmail={user?.email || undefined}
                 onGoHome={handleNavigateToDashboard}
                 onNavigateToImageGenerator={handleNavigateToImageGenerator}
+                onResultReady={() => navigate(`/${routes.analysisResults}`)}
               />
             )}
           </ProtectedRoute>

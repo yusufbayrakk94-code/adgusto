@@ -10,6 +10,7 @@ interface MarketingAnalysisProps {
     onLogout?: () => void;
     userEmail?: string;
     onGoHome?: () => void;
+    onResultReady?: () => void;
 }
 
 interface MarketingAnalysisPropsExtended extends MarketingAnalysisProps {
@@ -20,14 +21,31 @@ const MarketingAnalysisComponent: React.FC<MarketingAnalysisPropsExtended> = ({
     onAnalyze,
     loading,
     onBack,
-    onNavigateToImageGenerator
+    onNavigateToImageGenerator,
+    onResultReady
 }) => {
     const { t } = useLanguage();
     const [service, setService] = useState('');
-    const [result, setResult] = useState<any>(null);
+    const [rawResult, setRawResult] = useState<any>(null);
     const [error, setError] = useState<string | undefined>(undefined);
     const [selectedAdType, setSelectedAdType] = useState<any>(null);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
+
+    const normalizeAnalysisResult = (raw: any) => {
+        if (!raw) return null;
+        if (Array.isArray(raw) && raw.length > 0 && typeof raw[0] === 'object') {
+            return raw[0];
+        }
+        if (raw?.data && typeof raw.data === 'object') {
+            return raw.data;
+        }
+        if (raw?.result && typeof raw.result === 'object') {
+            return raw.result;
+        }
+        return raw;
+    };
+
+    const result = normalizeAnalysisResult(rawResult);
 
     useEffect(() => {
         if (result) {
@@ -36,7 +54,7 @@ const MarketingAnalysisComponent: React.FC<MarketingAnalysisPropsExtended> = ({
     }, [result]);
 
     const handleNewAnalysis = () => {
-        setResult(null);
+        setRawResult(null);
         setService('');
         setError(undefined);
     };
@@ -57,7 +75,7 @@ const MarketingAnalysisComponent: React.FC<MarketingAnalysisPropsExtended> = ({
         if (isAnalyzing) return;
 
         setError(undefined);
-        setResult(null);
+        setRawResult(null);
         setIsAnalyzing(true);
 
         if (!service.trim()) {
@@ -75,13 +93,18 @@ const MarketingAnalysisComponent: React.FC<MarketingAnalysisPropsExtended> = ({
                 return;
             }
 
+            const normalized = normalizeAnalysisResult(analysis);
             console.log('Analysis result:', analysis);
-            console.log('budgetRecommendation:', analysis?.budgetRecommendation);
-            console.log('adTypes:', analysis?.adTypes);
-            console.log('organicContent:', analysis?.organicContent);
+            console.log('Normalized result:', normalized);
+            console.log('budgetRecommendation:', normalized?.budgetRecommendation);
+            console.log('adTypes:', normalized?.adTypes);
+            console.log('organicContent:', normalized?.organicContent);
 
             setIsAnalyzing(false);
-            setResult(analysis);
+            setRawResult(normalized);
+            if (normalized && onResultReady) {
+                onResultReady();
+            }
         } catch (err) {
             console.error('Analysis error:', err);
             const errorMessage = err instanceof Error ? err.message : t('marketingAnalysis.errorAnalysis');
@@ -194,6 +217,25 @@ const MarketingAnalysisComponent: React.FC<MarketingAnalysisPropsExtended> = ({
                             <p className="text-gray text-sm">{t('marketingAnalysis.subtitle')}</p>
                         </div>
 
+                        <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+                            <h3 className="text-lg font-semibold text-dark mb-2">Analiz Tamamlandı</h3>
+                            <p className="text-gray text-sm mb-3">{result?.summary || 'Pazarlama analizi başarıyla tamamlandı.'}</p>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div className="bg-white rounded-xl p-4 border border-gray-200">
+                                    <p className="text-xs text-gray mb-1">Hizmet</p>
+                                    <p className="text-base font-semibold text-dark">{result?.service || service}</p>
+                                </div>
+                                <div className="bg-white rounded-xl p-4 border border-gray-200">
+                                    <p className="text-xs text-gray mb-1">Kanal Sayısı</p>
+                                    <p className="text-base font-semibold text-dark">{Array.isArray(result?.channels) ? result.channels.length : 0}</p>
+                                </div>
+                                <div className="bg-white rounded-xl p-4 border border-gray-200">
+                                    <p className="text-xs text-gray mb-1">Reklam Türü</p>
+                                    <p className="text-base font-semibold text-dark">{Array.isArray(result?.adTypes) ? result.adTypes.length : 0}</p>
+                                </div>
+                            </div>
+                        </div>
+
                         {/* PDF İndir Butonu - ÜST */}
                         <button
                             className="w-full bg-primary text-dark font-semibold py-4 rounded-lg hover:bg-secondary transition-all flex items-center justify-center gap-2 shadow-lg"
@@ -240,6 +282,27 @@ const MarketingAnalysisComponent: React.FC<MarketingAnalysisPropsExtended> = ({
                             </div>
                         )}
 
+                        {/* Kanallar */}
+                        {result?.channels && Array.isArray(result.channels) && result.channels.length > 0 && (
+                            <div className="bg-white border border-gray-200 rounded-lg p-6">
+                                <div className="flex items-center gap-2 mb-4">
+                                    <Target className="w-5 h-5 text-primary" />
+                                    <h3 className="text-lg font-semibold text-dark">Kanal Önerileri</h3>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    {result.channels.map((channel: any, idx: number) => (
+                                        <div key={idx} className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                                            <p className="text-sm font-semibold text-dark mb-2">{channel?.name || 'Kanal'}</p>
+                                            <p className="text-xs text-gray mb-2">{channel?.description || ''}</p>
+                                            <p className="text-xs text-dark">Etkililik: {channel?.effectiveness ?? '—'}</p>
+                                            <p className="text-xs text-dark">Maliyet: {channel?.cost || '—'}</p>
+                                            <p className="text-xs text-dark">Hedef Kitle: {channel?.targetAudience || '—'}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
                         {/* Reklam Formatları */}
                         {result?.adTypes && Array.isArray(result.adTypes) && result.adTypes.length > 0 && (
                             <div className="bg-white border border-gray-200 rounded-lg p-6">
@@ -273,6 +336,26 @@ const MarketingAnalysisComponent: React.FC<MarketingAnalysisPropsExtended> = ({
                                             >
                                                 {t('marketingAnalysis.createImages')}
                                             </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Copy Text Önerileri */}
+                        {result?.copyTexts && Array.isArray(result.copyTexts) && result.copyTexts.length > 0 && (
+                            <div className="bg-white border border-gray-200 rounded-lg p-6">
+                                <div className="flex items-center gap-2 mb-4">
+                                    <FileText className="w-5 h-5 text-primary" />
+                                    <h3 className="text-lg font-semibold text-dark">Reklam Metni Önerileri</h3>
+                                </div>
+                                <div className="space-y-3">
+                                    {result.copyTexts.map((copy: any, idx: number) => (
+                                        <div key={idx} className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                                            <p className="text-sm font-semibold text-dark mb-1">{copy?.platform || 'Platform'}</p>
+                                            <p className="text-xs text-gray mb-1">{copy?.headline || ''}</p>
+                                            <p className="text-xs text-dark mb-1">{copy?.description || ''}</p>
+                                            <p className="text-xs text-primary">CTA: {copy?.callToAction || ''}</p>
                                         </div>
                                     ))}
                                 </div>
@@ -352,7 +435,7 @@ const MarketingAnalysisComponent: React.FC<MarketingAnalysisPropsExtended> = ({
                         )}
 
                         {/* Diğer Sonuçlar (JSON) */}
-                        <details className="bg-gray-50 border border-gray-200 rounded-lg">
+                        <details open={false} className="bg-gray-50 border border-gray-200 rounded-lg">
                             <summary className="p-4 cursor-pointer text-sm font-medium text-dark hover:bg-gray-100 transition-colors">
                                 Detaylı Analiz Verilerini Göster
                             </summary>
