@@ -327,7 +327,16 @@ function AppContent() {
     const { t } = languageContextValue;
 
     return (
-      <div className="flex min-h-screen bg-slate-50 text-slate-950">
+      <div className="flex h-screen bg-white">
+        <button
+          className="md:hidden fixed top-4 left-4 z-50 bg-dark text-primary p-2 rounded-lg shadow-lg focus:outline-none"
+          onClick={() => setSidebarOpen(true)}
+          aria-label="Menüyü Aç"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+        </button>
         <Sidebar
           currentPage={location.pathname.substring(1) || routes.dashboard}
           onNavigate={(page: string) => {
@@ -341,21 +350,19 @@ function AppContent() {
           collapsed={sidebarCollapsed}
           onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
         />
-
         <div className="flex-1 overflow-auto">
-          <div className="relative">
-            <div className="mx-auto max-w-7xl p-6 lg:p-10">
-              {content}
-            </div>
-            <a
-              href="https://calendly.com/adgustoapp"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="fixed bottom-6 right-6 z-40 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-white shadow-soft transition hover:bg-primaryDark"
-            >
-              {t('common.demoSchedule')}
-            </a>
-          </div>
+          {content}
+          <a
+            href="https://calendly.com/adgustoapp"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="fixed bottom-6 right-6 bg-dark text-primary px-6 py-3 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 font-medium z-40 flex items-center gap-2"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+            </svg>
+            {t('common.demoSchedule')}
+          </a>
         </div>
       </div>
     );
@@ -365,99 +372,106 @@ function AppContent() {
     const { t } = languageContextValue;
 
     return (
-      <div className="min-h-screen bg-slate-50 py-10">
-        <div className="mx-auto max-w-7xl space-y-10 px-4 sm:px-6 lg:px-8">
-          <section className="rounded-[32px] border border-slate-200 bg-white p-10 shadow-soft">
-            <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
-              <div className="max-w-3xl">
-                <p className="text-sm font-semibold uppercase tracking-[0.35em] text-primary">Dashboard</p>
-                <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-slate-950 sm:text-5xl">
-                  {t('dashboard.welcomeTitle')}
-                </h1>
-                <p className="mt-5 text-base leading-8 text-slate-600">
-                  {t('dashboard.welcomeDescription') || 'Tüm pazarlama araçlarını tek bir panelde takip edin ve hızlıca erişin.'}
-                </p>
-              </div>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="rounded-3xl bg-slate-50 p-6 shadow-sm border border-slate-200">
-                  <p className="text-sm text-slate-500">Aktif Araçlar</p>
-                  <p className="mt-3 text-3xl font-semibold text-slate-950">8</p>
-                </div>
-                <div className="rounded-3xl bg-slate-50 p-6 shadow-sm border border-slate-200">
-                  <p className="text-sm text-slate-500">Hızlı Erişim</p>
-                  <p className="mt-3 text-3xl font-semibold text-slate-950">Tek sayfa</p>
-                </div>
-              </div>
-            </div>
-          </section>
+      <div className="min-h-screen bg-white p-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-16">
+            <h1 className="text-5xl font-light text-dark mb-4">
+              {t('dashboard.welcomeTitle')}
+            </h1>
+          </div>
 
-          <section className="grid gap-6 lg:grid-cols-3">
+          <div className="grid md:grid-cols-3 gap-6 mb-16">
             <button
               onClick={() => navigate(`/${routes.marketingAnalysis}`)}
-              className="group rounded-[28px] border border-slate-200 bg-white p-8 text-left shadow-sm transition hover:-translate-y-1 hover:border-primary hover:shadow-lg"
+              className="group bg-white border-2 border-gray/20 rounded-2xl p-6 hover:border-primary hover:shadow-sm hover:-translate-y-1 transition-all duration-200 text-left"
             >
-              <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-3xl bg-primary/10 text-primary">
-                <Sparkles className="h-7 w-7" />
+              <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+                <Sparkles className="w-7 h-7 text-dark" />
               </div>
-              <h3 className="text-xl font-semibold text-slate-950">{t('dashboard.marketingAnalysis.title')}</h3>
-              <p className="mt-3 text-sm leading-6 text-slate-600">{t('dashboard.marketingAnalysis.description')}</p>
+              <h3 className="text-lg font-medium text-dark mb-2">{t('dashboard.marketingAnalysis.title')}</h3>
+              <p className="text-sm text-gray leading-relaxed">
+                {t('dashboard.marketingAnalysis.description')}
+              </p>
             </button>
 
             <button
               onClick={() => navigate(`/${routes.adCopy}`)}
-              className="group rounded-[28px] border border-slate-200 bg-white p-8 text-left shadow-sm transition hover:-translate-y-1 hover:border-primary hover:shadow-lg"
+              className="group bg-white border-2 border-gray/20 rounded-2xl p-6 hover:border-primary hover:shadow-sm hover:-translate-y-1 transition-all duration-200 text-left"
             >
-              <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-3xl bg-primary/10 text-primary">
-                <FileText className="h-7 w-7" />
+              <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+                <FileText className="w-7 h-7 text-dark" />
               </div>
-              <h3 className="text-xl font-semibold text-slate-950">{t('dashboard.adCopy.title')}</h3>
-              <p className="mt-3 text-sm leading-6 text-slate-600">{t('dashboard.adCopy.description')}</p>
+              <h3 className="text-lg font-medium text-dark mb-2">{t('dashboard.adCopy.title')}</h3>
+              <p className="text-sm text-gray leading-relaxed">
+                {t('dashboard.adCopy.description')}
+              </p>
             </button>
 
             <button
               onClick={() => navigate(`/${routes.campaignAnalyzer}`)}
-              className="group rounded-[28px] border border-slate-200 bg-white p-8 text-left shadow-sm transition hover:-translate-y-1 hover:border-primary hover:shadow-lg"
+              className="group bg-white border-2 border-gray/20 rounded-2xl p-6 hover:border-primary hover:shadow-sm hover:-translate-y-1 transition-all duration-200 text-left"
             >
-              <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-3xl bg-primary/10 text-primary">
-                <TrendingUp className="h-7 w-7" />
+              <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+                <BarChart3 className="w-7 h-7 text-dark" />
               </div>
-              <h3 className="text-xl font-semibold text-slate-950">{t('dashboard.campaignAnalyzer.title')}</h3>
-              <p className="mt-3 text-sm leading-6 text-slate-600">{t('dashboard.campaignAnalyzer.description')}</p>
+              <h3 className="text-lg font-medium text-dark mb-2">{t('dashboard.campaignAnalyzer.title')}</h3>
+              <p className="text-sm text-gray leading-relaxed">
+                {t('dashboard.campaignAnalyzer.description')}
+              </p>
             </button>
-          </section>
 
-          <section className="grid gap-6 lg:grid-cols-3">
             <button
               onClick={() => navigate(`/${routes.imageGenerator}`)}
-              className="group rounded-[28px] border border-slate-200 bg-white p-8 text-left shadow-sm transition hover:-translate-y-1 hover:border-primary hover:shadow-lg"
+              className="group bg-white border-2 border-gray/20 rounded-2xl p-6 hover:border-primary hover:shadow-sm hover:-translate-y-1 transition-all duration-200 text-left"
             >
-              <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-3xl bg-primary/10 text-primary">
-                <ImageIcon className="h-7 w-7" />
+              <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+                <ImageIcon className="w-7 h-7 text-dark" />
               </div>
-              <h3 className="text-xl font-semibold text-slate-950">{t('dashboard.imageGenerator.title')}</h3>
-              <p className="mt-3 text-sm leading-6 text-slate-600">{t('dashboard.imageGenerator.description')}</p>
+              <h3 className="text-lg font-medium text-dark mb-2">{t('dashboard.imageGenerator.title')}</h3>
+              <p className="text-sm text-gray leading-relaxed">
+                {t('dashboard.imageGenerator.description')}
+              </p>
             </button>
 
             <button
               onClick={() => navigate(`/${routes.imageAnalyzer}`)}
-              className="group rounded-[28px] border border-slate-200 bg-white p-8 text-left shadow-sm transition hover:-translate-y-1 hover:border-primary hover:shadow-lg"
+              className="group bg-white border-2 border-gray/20 rounded-2xl p-6 hover:border-primary hover:shadow-sm hover:-translate-y-1 transition-all duration-200 text-left"
             >
-              <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-3xl bg-primary/10 text-primary">
-                <Eye className="h-7 w-7" />
+              <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+                <Eye className="w-7 h-7 text-dark" />
               </div>
-              <h3 className="text-xl font-semibold text-slate-950">{t('dashboard.imageAnalyzer.title')}</h3>
-              <p className="mt-3 text-sm leading-6 text-slate-600">{t('dashboard.imageAnalyzer.description')}</p>
+              <h3 className="text-lg font-medium text-dark mb-2">{t('dashboard.imageAnalyzer.title')}</h3>
+              <p className="text-sm text-gray leading-relaxed">
+                {t('dashboard.imageAnalyzer.description')}
+              </p>
             </button>
 
-            <div className="rounded-[28px] border border-slate-200 bg-white p-8 text-left shadow-sm opacity-80">
-              <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-3xl bg-slate-100 text-slate-700">
-                <LineChart className="h-7 w-7" />
+            <div className="relative bg-gradient-to-br from-gray-50 to-white border-2 border-gray/20 rounded-2xl p-6 text-left opacity-60 cursor-not-allowed">
+              <div className="absolute top-3 right-3">
+                <span className="bg-primary text-dark text-xs font-bold px-3 py-1 rounded-full">{t('dashboard.comingSoon')}</span>
               </div>
-              <h3 className="text-xl font-semibold text-slate-950">{t('dashboard.adManagement.title')}</h3>
-              <p className="mt-3 text-sm leading-6 text-slate-600">{t('dashboard.adManagement.description')}</p>
-              <span className="mt-6 inline-flex rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">{t('dashboard.comingSoon')}</span>
+              <div className="w-14 h-14 bg-gray-200 rounded-xl flex items-center justify-center mb-4">
+                <LineChart className="w-7 h-7 text-gray" />
+              </div>
+              <h3 className="text-lg font-medium text-dark mb-2">{t('dashboard.adManagement.title')}</h3>
+              <p className="text-sm text-gray leading-relaxed">
+                {t('dashboard.adManagement.description')}
+              </p>
             </div>
-          </section>
+
+            <div className="relative bg-gradient-to-br from-gray-50 to-white border-2 border-gray/20 rounded-2xl p-6 text-left opacity-60 cursor-not-allowed">
+              <div className="absolute top-3 right-3">
+                <span className="bg-primary text-dark text-xs font-bold px-3 py-1 rounded-full">{t('dashboard.comingSoon')}</span>
+              </div>
+              <div className="w-14 h-14 bg-gray-200 rounded-xl flex items-center justify-center mb-4">
+                <Video className="w-7 h-7 text-gray" />
+              </div>
+              <h3 className="text-lg font-medium text-dark mb-2">{t('dashboard.videoGenerator.title')}</h3>
+              <p className="text-sm text-gray leading-relaxed">
+                {t('dashboard.videoGenerator.description')}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     );

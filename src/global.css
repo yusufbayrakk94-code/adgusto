@@ -1,87 +1,30 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700;800&display=swap');
 
 :root {
-  color-scheme: light;
-  --bg: #f8fafc;
-  --surface: #ffffff;
-  --surface-soft: #f1f5f9;
-  --text: #0f172a;
-  --muted: #64748b;
-  --primary: #22c55e;
-  --primary-strong: #15803d;
-  --border: #e2e8f0;
-  --shadow: 0 24px 80px rgba(15, 23, 42, 0.08);
-}
-
-* {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
+  --primary-color: #94fa01;
+  --secondary-color: #94fa01;
+  --dark-color: #0b0b0b;
+  --gray-color: #828282;
 }
 
 body {
-  margin: 0;
-  min-height: 100vh;
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Inter', Arial, Helvetica, sans-serif;
-  font-feature-settings: 'cv02' 1, 'cv05' 1;
-}
-
-img {
-  max-width: 100%;
-  display: block;
-}
-
-a {
-  color: inherit;
-}
-
-button,
-input,
-textarea,
-select {
-  font: inherit;
-}
-
-::selection {
-  background: rgba(34, 197, 94, 0.18);
-}
-
-body::-webkit-scrollbar {
-  width: 12px;
-}
-
-body::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-body::-webkit-scrollbar-thumb {
-  background: rgba(15, 23, 42, 0.18);
-  border-radius: 9999px;
+  font-family: 'Work Sans', Arial, Helvetica, sans-serif;
 }
 
 @media (max-width: 768px) {
-  .container,
-  .main,
-  .content,
-  .page {
+  .container, .main, .content, .page {
     padding: 10px !important;
     margin: 10px auto !important;
     max-width: 100% !important;
   }
-  button,
-  .btn,
-  .button {
+  
+  button, .btn, .button {
     width: 100% !important;
     margin: 5px 0 !important;
     padding: 12px !important;
   }
-  input,
-  textarea,
-  select {
+  
+  input, textarea, select {
     width: 100% !important;
     margin: 5px 0 !important;
     padding: 12px !important;
