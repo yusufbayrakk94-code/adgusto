@@ -4,11 +4,15 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#94fa01',
-        secondary: '#94fa01',
-        accent: '#94fa01',
-        dark: '#0b0b0b',
-        gray: '#828282',
+        primary: '#22c55e',
+        primaryDark: '#166534',
+        accent: '#10b981',
+        dark: '#0f172a',
+        muted: '#64748b',
+      },
+      boxShadow: {
+        soft: '0 24px 80px rgba(15, 23, 42, 0.08)',
+        card: '0 24px 60px rgba(15, 23, 42, 0.08)',
       },
       fontFamily: {
         inter: ['Inter', 'ui-sans-serif', 'system-ui'],

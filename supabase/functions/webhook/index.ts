@@ -1,3 +1,4 @@
+import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { initializeApp, cert } from 'https://esm.sh/firebase-admin@11.8.0/app'
 import { getFirestore } from 'https://esm.sh/firebase-admin@11.8.0/firestore'
